@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- Dòng trên cùng chứa nút mở rộng, đoạn text và nút thêm bạn bè -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <!-- Nút mở rộng -->
+        <ImageView
+            android:id="@+id/expandButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_menu"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="Expand" />
+
+        <!-- Đoạn text -->
+        <TextView
+            android:id="@+id/messageText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hãy trò chuyện một cách lịch sự!"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:textColor="#760808"
+            android:textSize="16sp" />
+
+        <!-- Nút thêm bạn bè -->
+        <ImageView
+            android:id="@+id/addFriendButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_add_user"
+        android:layout_marginStart="8dp"
+        android:contentDescription="Add Friend"
+        android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <!-- RecyclerView để hiển thị danh sách đoạn chat -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp" />
+
+</LinearLayout>
