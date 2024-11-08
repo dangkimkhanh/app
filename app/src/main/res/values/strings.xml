@@ -90,5 +90,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="facebook_app_id">548486178073104</string>
+    <string name="fb_login_protocol_scheme">548486178073104</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

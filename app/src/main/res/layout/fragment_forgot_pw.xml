@@ -1,0 +1,44 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quên mật khẩu"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"/>
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nhập gmail của bạn"
+        android:background="@drawable/bodercorner_white"
+        android:padding="10dp"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="40dp"/>
+
+    <Button
+        android:id="@+id/btn_reset_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#063CC8"
+        android:text="Gửi yêu cầu đặt lại mật khẩu"
+        android:layout_marginTop="40dp"/>
+
+    <Button
+        android:id="@+id/btn_back_to_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#063CC8"
+        android:text="Đã có mật khẩu quay lại Đăng nhập"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"/>
+</LinearLayout>

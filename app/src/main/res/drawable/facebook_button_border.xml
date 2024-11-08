@@ -1,0 +1,11 @@
+<!-- res/drawable/facebook_button_border.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Border color and thickness -->
+    <solid android:color="#FFFFFF" /> <!-- Background color (white) -->
+    <stroke
+        android:width="2dp"
+        android:color="#FD77A7" /> <!-- Border color (example: pink) -->
+
+    <!-- Corner radius -->
+    <corners android:radius="160dp" />
+</shape>

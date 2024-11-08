@@ -4,21 +4,21 @@
     <item
         android:id="@+id/navigation_feed"
         android:icon="@drawable/ic_feed"
-        android:title="Trang chủ" />
+        android:title="" />
     <item
         android:id="@+id/navigation_map"
         android:icon="@drawable/ic_map"
-        android:title="Map" />
+        android:title="" />
     <item
         android:id="@+id/navigation_post"
         android:icon="@drawable/ic_post"
-        android:title="Đăng ngay" />
+        android:title="" />
     <item
         android:id="@+id/navigation_message"
         android:icon="@drawable/ic_message"
-        android:title="Tin nhắn" />
+        android:title="" />
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_profile"
-        android:title="Cá nhân" />
+        android:title="" />
 </menu>

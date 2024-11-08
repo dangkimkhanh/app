@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "613662455788",
+    "firebase_url": "https://h2hdatabase-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "h2hdatabase",
+    "storage_bucket": "h2hdatabase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613662455788:android:bce43c5fe5cd03b2c372c9",
+        "android_client_info": {
+          "package_name": "com.example.h2h"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "613662455788-eh9r9k1ihsba70j48echlj40jnt0ik2c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.h2h",
+            "certificate_hash": "b8bcab3a4d58066a8723802eebbb85d6613035e5"
+          }
+        },
+        {
+          "client_id": "613662455788-c8lrsd7vfmr372tmni363i919ne2ohki.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClYSex9Bqk2N42_YK0AfYZYWSWrWHPCtw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "613662455788-c8lrsd7vfmr372tmni363i919ne2ohki.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

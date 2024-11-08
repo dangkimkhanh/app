@@ -1,8 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapsFragment" />
+    tools:context=".Fragment.MapsFragment">
+
+    <!-- Fragment chứa Google Map -->
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Nút tìm kiếm hoặc nhập vị trí để tìm kiếm trên bản đồ -->
+    <EditText
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tìm kiếm địa điểm"
+        android:layout_alignParentTop="true"
+        android:padding="10dp"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:drawableLeft="@android:drawable/ic_menu_search" />
+
+    <!-- Nút zoom in (phóng to bản đồ) -->
+    <ImageButton
+        android:id="@+id/btn_zoom_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_input_add"
+        android:background="?attr/selectableItemBackground"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="80dp"
+        android:layout_alignParentEnd="true"
+        android:padding="10dp"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="Phóng to bản đồ" />
+
+    <ImageButton
+        android:id="@+id/btn_zoom_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_input_delete"
+        android:background="?attr/selectableItemBackground"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_alignParentEnd="true"
+        android:padding="10dp"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="Thu nhỏ bản đồ" />
+
+    <ImageButton
+        android:id="@+id/btn_my_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_mylocation"
+        android:background="?attr/selectableItemBackground"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="150dp"
+        android:layout_alignParentEnd="true"
+        android:padding="10dp"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="Vị trí hiện tại" />
+
+</RelativeLayout>
