@@ -1,32 +1,47 @@
 package com.example.h2h.Fragment
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.addCallback
+import androidx.activity.result.launch
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.compose.ui.semantics.text
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navOptions
+import androidx.lifecycle.lifecycleScope
 import com.example.h2h.MainActivity
 import com.example.h2h.R
+import com.example.h2h.models.DefaultImages
 import com.example.h2h.models.User
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.io.ByteArrayOutputStream
 import java.util.*
 
 class RegisterFragment : Fragment() {
     private var isConfirmed = false // Biến theo dõi trạng thái
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,6 +65,7 @@ class RegisterFragment : Fragment() {
         val radioMale = view.findViewById<RadioButton>(R.id.radioMale)
         val radioFemale = view.findViewById<RadioButton>(R.id.radioFemale)
         val confirmButton = view.findViewById<Button>(R.id.confirm_button)
+        //tải ảnh
 
         selectDateLayout.setOnClickListener {
             hideKeyboard()
@@ -64,7 +80,7 @@ class RegisterFragment : Fragment() {
                     if (selectedYear <= year) {
                         textViewDate.text = "$selectedDay/${selectedMonth + 1}/$selectedYear"
                     } else {
-                        Toast.makeText(requireContext(), "Bạn phải từ 14 tuổi trở lên", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Bạn phải từ 15 tuổi trở lên", Toast.LENGTH_SHORT).show()
                     }
                 },
                 year,
@@ -76,6 +92,7 @@ class RegisterFragment : Fragment() {
         }
 
         confirmButton.setOnClickListener {
+
             val name = editTextName.text.toString()
             val dateOfBirth = textViewDate.text.toString()
             val gender = if (radioMale.isChecked) "Nam" else "Nữ"
@@ -83,6 +100,7 @@ class RegisterFragment : Fragment() {
             if (name.isEmpty() || dateOfBirth.isEmpty() || gender.isEmpty()) {
                 Toast.makeText(requireContext(), "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
+
             }
 
             val calendar = Calendar.getInstance()
@@ -95,13 +113,12 @@ class RegisterFragment : Fragment() {
                 saveUserToFirebase(name, dateOfBirth, gender)
             }
         }
-
     }
+
     private fun hideKeyboard() {
         val imm = requireActivity().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
     }
-
 
     override fun onStop() {
         super.onStop()
@@ -111,34 +128,44 @@ class RegisterFragment : Fragment() {
             FirebaseAuth.getInstance().signOut()
         }
     }
+
     private fun saveUserToFirebase(name: String, dateOfBirth: String, gender: String) {
-        val email = arguments?.getString("email")
         val uid = Firebase.auth.currentUser?.uid ?: return
         val database = FirebaseDatabase.getInstance()
         val usersRef = database.getReference("users")
+        val storage = Firebase.storage
 
-        // Set URL ảnh đại diện mặc định dựa trên giới tính
-        val defaultProfileImageUrl = if (gender == "Nam") {
-            "@drawable/default_avatar_male"
-        } else {
-            "@drawable/default_avatar_female"
-        }
-        val defaultCoverImageUrl = "@drawable/cover_image_default"
+        lifecycleScope.launch {
+            try {
+                val maleAvatarUrl = storage.getReference("images/male_avatar.jpg").downloadUrl.await().toString()
+                val femaleAvatarUrl = storage.getReference("images/female_avatar.jpg").downloadUrl.await().toString()
+                val coverImageUrl = storage.getReference("images/cover.jpg").downloadUrl.await().toString()
 
-        val user = User(uid, name, dateOfBirth, gender, defaultProfileImageUrl, defaultCoverImageUrl)
-        usersRef.child(uid).setValue(user).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                isConfirmed = true // Đánh dấu đã xác nhận
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                Toast.makeText(requireContext(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show()
-                requireActivity().finish()
-            } else {
-                Toast.makeText(requireContext(), "Đăng ký thất bại, thử lại sau", Toast.LENGTH_SHORT).show()
+                val profileImageUrl = if (gender == "Nam") {
+                    maleAvatarUrl
+                } else {
+                    femaleAvatarUrl
+                }
+
+                val user = User(uid, name, dateOfBirth, gender, introduction = "Mình là người mới", profileImageUrl ?: "", coverImageUrl ?: "")
+                usersRef.child(uid).setValue(user).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        isConfirmed = true
+                        val intent = Intent(requireContext(), MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        Toast.makeText(requireContext(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show()
+                        requireActivity().finish()
+                    } else {
+                        Toast.makeText(requireContext(), "Đăng ký thất bại, thử lại sau", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Tải ảnh lên thất bại: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
+    ///viết đoạn mã để tải 3 ảnh đó lên tại đây
 
 }
 

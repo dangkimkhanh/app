@@ -8,6 +8,7 @@ data class User(
     var name: String = "",
     var dateOfBirth: String = "",
     var gender: String = "",
+    var introduction: String="",
     var profileImageUrl: String? = null, // URL ảnh đại diện
     var coverImageUrl: String? = null // URL ảnh bìa
 ) {

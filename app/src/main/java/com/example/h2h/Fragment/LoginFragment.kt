@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.h2h.Fragment
 
 import android.content.Intent

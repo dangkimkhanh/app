@@ -6,10 +6,10 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/option_view_cover"
+        android:id="@+id/option_change_avt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Xem ảnh bìa"
+        android:text="Thay ảnh đại diện"
         android:padding="16dp"
         android:gravity="center" />
 
@@ -17,14 +17,21 @@
         android:id="@+id/option_change_cover"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Thay đổi ảnh bìa"
+        android:text="Thay ảnh bìa"
         android:padding="16dp"
         android:gravity="center" />
     <TextView
-        android:id="@+id/option_takecover"
+        android:id="@+id/option_change_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Chụp ảnh ngay"
+        android:text="Sửa tên của bạn"
+        android:padding="16dp"
+        android:gravity="center" />
+    <TextView
+        android:id="@+id/option_edit_introduc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sửa phần giới thiệu"
         android:padding="16dp"
         android:gravity="center" />
 

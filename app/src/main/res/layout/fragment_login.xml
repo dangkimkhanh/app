@@ -46,7 +46,7 @@
     <!-- Facebook Login Button -->
 
     <!-- "Or" Text -->
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/login_facebook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,7 +68,12 @@
             android:textSize="20sp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="20dp" />
-    </LinearLayout>
+    </LinearLayout>-->
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_facebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
     <TextView
         android:id="@+id/or_text"
         android:layout_width="wrap_content"

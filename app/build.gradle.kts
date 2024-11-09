@@ -45,6 +45,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.0"
     }
+
 }
 
 dependencies {
@@ -66,14 +67,13 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.compose.material)
     implementation(libs.play.services.fido)
+    implementation(libs.play.services.auth)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))//firebase
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-database-ktx")
-    implementation("com.google.android.gms:play-services-auth:20.6.0")//firebase
     implementation ("androidx.cardview:cardview:1.0.0")
     implementation ("androidx.fragment:fragment-ktx:1.6.1")
     implementation ("androidx.viewpager2:viewpager2:1.0.0")
@@ -88,7 +88,9 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.3.0")
     implementation("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
-    implementation("com.facebook.android:facebook-android-sdk:[8,9)")
+    implementation("com.facebook.android:facebook-android-sdk:8.0.0")
+    implementation("com.squareup.picasso:picasso:2.8")
+    implementation("androidx.glance:glance:1.0.0-alpha03")
 
 
 
