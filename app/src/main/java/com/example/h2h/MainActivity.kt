@@ -1,7 +1,10 @@
 package com.example.h2h
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.red
 import androidx.fragment.app.Fragment
 import com.example.h2h.Fragment.*
 import com.example.h2h.databinding.ActivityMainBinding

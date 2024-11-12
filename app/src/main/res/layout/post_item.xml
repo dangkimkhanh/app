@@ -33,6 +33,7 @@
                 android:layout_marginLeft="16dp"
                 app:cardCornerRadius="25dp">
                 <ImageView
+                    android:id="@+id/avt_image"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/ic_avatar"
@@ -61,6 +62,7 @@
                     android:textSize="16sp"/>
 
                 <TextView
+                    android:id="@+id/time_post"
                     android:layout_marginLeft="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -72,15 +74,28 @@
 
         <!-- Nội dung bài viết -->
         <TextView
+            android:id="@+id/text_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:text="Nội dung bài viết mẫu. Đây là nội dung của bài viết này, có thể là văn bản, cảm xúc, chia sẻ..."
             android:textSize="14sp"
             android:layout_marginBottom="12dp"/>
+        <TextView
+            android:id="@+id/text_view_post"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:visibility="gone"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:background="@drawable/corner5dp"
+            android:padding="16dp" />
 
         <!-- Ảnh đính kèm -->
         <ImageView
+            android:id="@+id/image_post"
             android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="200dp"
@@ -97,7 +112,7 @@
         <!-- Layout đầu tiên -->
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:layout_marginEnd="10dp"
             android:orientation="horizontal"
@@ -106,12 +121,12 @@
             android:layout_marginTop="8dp">
 
         <!-- Biểu tượng Like -->
-        <ImageView
-            android:id="@+id/imageViewLikef"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_heart" />
-
+            <ImageView
+                android:id="@+id/imageViewLikef"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_heart"
+                app:tint="@color/color_selector" />
         <!-- Số lượng Like -->
         <TextView
             android:id="@+id/textViewLikeCountf"
@@ -119,14 +134,14 @@
             android:layout_height="wrap_content"
             android:text="100"
             android:textSize="14sp"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="7dp"
             android:textColor="#000000"/>
     </LinearLayout>
 
     <!-- Layout thứ hai -->
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_weight="1"
         android:layout_marginEnd="10dp"
         android:orientation="horizontal"
@@ -148,14 +163,14 @@
         android:layout_height="wrap_content"
         android:text="100"
         android:textSize="14sp"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="7dp"
         android:textColor="#000000"/>
 </LinearLayout>
 
     <!-- Layout thứ ba -->
 <LinearLayout
 android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_height="30dp"
     android:layout_weight="1"
     android:orientation="horizontal"
     android:gravity="center"
@@ -176,7 +191,7 @@ android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:text="100"
 android:textSize="14sp"
-android:layout_marginStart="4dp"
+android:layout_marginStart="7dp"
 android:textColor="#000000"/>
     </LinearLayout>
     </LinearLayout>

@@ -71,7 +71,7 @@ class RegisterFragment : Fragment() {
             hideKeyboard()
             val calendar = Calendar.getInstance()
             val currentYear = calendar.get(Calendar.YEAR)
-            val year = currentYear - 15
+            val year = currentYear - 16
             val month = calendar.get(Calendar.MONTH)
             val day = calendar.get(Calendar.DAY_OF_MONTH)
             val datePickerDialog = DatePickerDialog(

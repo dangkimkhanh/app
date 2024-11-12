@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.play.services.fido)
     implementation(libs.play.services.auth)
     implementation(libs.firebase.storage.ktx)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
