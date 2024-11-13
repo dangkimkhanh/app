@@ -92,6 +92,7 @@ dependencies {
     implementation("com.facebook.android:facebook-android-sdk:8.0.0")
     implementation("com.squareup.picasso:picasso:2.8")
     implementation("androidx.glance:glance:1.0.0-alpha03")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
 
 

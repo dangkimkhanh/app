@@ -1,12 +1,12 @@
 package com.example.h2h.models
 
 data class CreatePost(
+    var content: String? = null,
+    var imageOrVideoUrl: String? = null,
+    var userId: String? = null,
+    var timestamp: Long? = null,
     var postId: String? = null,
-    val content: String,
-    val imageOrVideoUrl: String? = null, // Thay đổi kiểu dữ liệu
-    val timestamp: Long,
-    val userId: String,
-    var likes: Int = 0,
-    var comments: Int = 0,
-    var shares: Int = 0
+    var likes: Map<String, Boolean> = emptyMap() , // Danh sách rỗng khi khởi tạo
+    var comments:Map<String, Boolean> = emptyMap() , // Danh sách rỗng khi khởi tạo
+    var shares: Map<String, Boolean> = emptyMap()  // Danh sách rỗng khi khởi tạo
 )

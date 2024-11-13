@@ -13,19 +13,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.type
-import androidx.compose.ui.semantics.text
-import com.example.h2h.models.Comment
 import com.example.h2h.models.CreatePost
-import com.example.h2h.models.Like
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
@@ -145,7 +138,10 @@ class CreatePostActivity : AppCompatActivity() {
             content = content,
             imageOrVideoUrl = mediaUrl,
             timestamp = System.currentTimeMillis(),
-            userId = userId
+            userId = userId ,
+            likes = emptyMap(), // Khởi tạo likes là một map rỗng
+            comments = emptyMap(), // Khởi tạo comments là một map rỗng
+            shares = emptyMap() // Khởi tạo shares là một map rỗng
         )
 
         newPostRef.setValue(newPost)
