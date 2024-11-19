@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/item_chat"
     android:padding="8dp">
 
     <!-- Avatar Image -->
@@ -16,32 +17,37 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <!-- Online Status Dot -->
-    <View
-        android:id="@+id/online_status"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:background="@drawable/online_status"
-        app:layout_constraintBottom_toBottomOf="@id/image_avatar"
-        app:layout_constraintEnd_toEndOf="@id/image_avatar"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"/>
+
+
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/online_status"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            app:layout_constraintBottom_toBottomOf="@id/image_avatar"
+            app:layout_constraintEnd_toEndOf="@id/image_avatar"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"/>
 
     <!-- User Info -->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/star_chat"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@id/image_avatar"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tên người dùng"
             android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textSize="16sp"/>
 
         <TextView
@@ -52,4 +58,5 @@
             android:textSize="12sp"
             android:textColor="#808080"/>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

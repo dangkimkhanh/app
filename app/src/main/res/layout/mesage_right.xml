@@ -1,19 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
     android:orientation="horizontal"
     android:layout_gravity="end"
+    android:gravity="end"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/send_time"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="19:20"
+        android:layout_gravity="bottom"
+        android:clipToOutline="true"/>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ic_read"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_read"
+        app:civ_border_color="#fff"
+        android:layout_gravity="bottom"
+        android:clipToOutline="true"/>
 
     <TextView
         android:id="@+id/message_text_send"
         android:layout_width="wrap_content"
+        android:maxWidth="300dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/coner_mesage_send"
+        android:background="@drawable/layout_message_send"
         android:padding="8dp"
+        android:layout_gravity="end"
         android:layout_marginEnd="10dp"
-        android:layout_marginStart="130dp"
-        android:text="Sample message Sample messageSample messageSample message"
+        android:text="Sample     "
         android:textColor="@color/white" />
+    <ImageView
+        android:id="@+id/message_image_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="300dp"
+        android:layout_marginEnd="10dp"
+        android:adjustViewBounds="true"
+        android:visibility="gone" />
+
 </LinearLayout>

@@ -22,7 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:layout_marginBottom="2dp"
             android:layout_marginTop="10dp">
 
 
@@ -73,7 +74,6 @@
                 android:id="@+id/edit_post"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 app:tint="#797979"
                 android:src="@drawable/ic_menu" />
@@ -105,6 +105,8 @@
         <ImageView
             android:id="@+id/image_post"
             android:padding="5dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:src="@drawable/ic_image_placeholder"
@@ -119,6 +121,7 @@
 
         <!-- Layout đầu tiên -->
         <LinearLayout
+            android:id="@+id/view_like"
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_weight="1"
@@ -148,6 +151,7 @@
 
     <!-- Layout thứ hai -->
     <LinearLayout
+        android:id="@+id/comment_post"
         android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_weight="1"

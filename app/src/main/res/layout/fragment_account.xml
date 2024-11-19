@@ -36,6 +36,8 @@
                     android:id="@+id/view_avatar"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
+                    app:civ_border_width="1dp"
+                    app:civ_border_color="#A4A4A4"
                     android:layout_gravity="center_vertical"
                     android:scaleType="centerCrop" />
 
@@ -74,6 +76,7 @@
             android:background="#ffff"
             android:padding="8dp">
             <LinearLayout
+                android:id="@+id/stores"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

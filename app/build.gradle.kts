@@ -1,8 +1,11 @@
+@file:Suppress("DEPRECATION")
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
     id("com.google.gms.google-services")
+
 
 }
 
@@ -19,7 +22,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    packagingOptions {
+        pickFirst("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -70,6 +75,10 @@ dependencies {
     implementation(libs.play.services.auth)
     implementation(libs.firebase.storage.ktx)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.play.services.fido)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.identity.jvm)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -84,7 +93,6 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.3.0")
     implementation("androidx.compose.ui:ui-graphics:1.3.0")
     implementation("androidx.compose.ui:ui-tooling-preview:1.3.0")
-    implementation("androidx.compose.material3:material3:1.0.0")
     debugImplementation("androidx.compose.ui:ui-tooling:1.3.0")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.3.0")
     implementation("com.github.bumptech.glide:glide:4.15.1")
@@ -93,6 +101,11 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.8")
     implementation("androidx.glance:glance:1.0.0-alpha03")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
+    implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.+")
+    implementation("id.zelory:compressor:3.0.1")
+
 
 
 

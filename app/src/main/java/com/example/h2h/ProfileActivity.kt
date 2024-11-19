@@ -94,9 +94,11 @@ class ProfileActivity : AppCompatActivity() {
                     binding.introduction.text = user.introduction
                     binding.username.text = user.name
                     Picasso.get().load(user.profileImageUrl).into(binding.avatarImageView)
-                    Picasso.get().load(user.profileImageUrl).into(binding.avatarImage)
                     Picasso.get().load(user.coverImageUrl).into(binding.coverImage)
                     setupGenderAge(user)
+                    binding.avatarImage.post {
+                        Picasso.get().load(user.profileImageUrl).into(binding.avatarImage)
+                    }
                 }
             }
 

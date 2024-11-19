@@ -3,9 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:orientation="vertical">
 
     <!-- Dòng trên cùng chứa nút mở rộng, đoạn text và nút thêm bạn bè -->
     <LinearLayout
@@ -43,14 +41,18 @@
             android:contentDescription="Add Friend"
             android:layout_gravity="center_vertical" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#A49C9C"/>
 
     <!-- RecyclerView để hiển thị danh sách đoạn chat -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chatRecyclerView"
+        android:id="@+id/item_chat_RecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:listitem="@layout/item_chat"
-        android:padding="8dp" />
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
 
 </LinearLayout>

@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_map"
         android:title="" />
     <item
-        android:id="@+id/navigation_post"
+        android:id="@+id/navigation_mach"
         android:icon="@drawable/ic_post"
         android:title="" />
     <item

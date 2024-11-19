@@ -1,5 +1,6 @@
 package com.example.h2h.Fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +12,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.compose.ui.semantics.text
 import androidx.fragment.app.Fragment
 import androidx.glance.visibility
-import com.example.h2h.LoginActivity
 import com.example.h2h.ProfileActivity
 import com.example.h2h.R
 import com.example.h2h.databinding.FragmentAccountBinding
@@ -20,9 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 
@@ -30,8 +28,21 @@ class AccountFragment : Fragment() {
 
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
-    private lateinit var userRef: DatabaseReference
-    private lateinit var userListener: ValueEventListener
+
+    interface LogoutListener {
+        fun onLogout()
+    }
+
+    private var logoutListener: LogoutListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is LogoutListener) {
+            logoutListener = context
+        } else {
+            throw RuntimeException("$context must implement LogoutListener")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,46 +59,25 @@ class AccountFragment : Fragment() {
             val intent = Intent(requireContext(), ProfileActivity::class.java)
             startActivity(intent)
         }
-
-        binding.progressBar.visibility = View.VISIBLE
         val uid = Firebase.auth.currentUser?.uid ?: return
-        userRef = FirebaseDatabase.getInstance().getReference("users").child(uid)
+        val userRef = FirebaseDatabase.getInstance().getReference("users").child(uid)
 
-        userListener = object : ValueEventListener {
+        userRef.addListenerForSingleValueEvent(object : com.google.firebase.database.ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user = snapshot.getValue(User::class.java)
                 if (user != null) {
                     binding.username.text = user.name
 
-                    Picasso.get().load(user.profileImageUrl)
-                        .into(binding.viewAvatar, object : com.squareup.picasso.Callback {
-                            override fun onSuccess() {
-                                binding.progressBar.visibility = View.GONE
-                            }
-
-                            override fun onError(error: Exception?) {
-                                binding.progressBar.visibility = View.GONE
-                                // Xử lý lỗi tải ảnh, ví dụ: hiển thị ảnh mặc định
-                            }
-                        })
+                    binding.viewAvatar.post {
+                        Picasso.get().load(user.profileImageUrl).into(binding.viewAvatar)
+                    }
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                if (error.code == DatabaseError.DISCONNECTED) {
-                    // Tắt thông báo lỗi (nếu có)
-                    // ...
-                    val intent = Intent(requireContext(), LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    startActivity(intent)
-                    requireActivity().finish()
-                } else {
-                    Log.e("AccountFragment", "Lỗi khi lấy dữ liệu người dùng", error.toException())
-                }
+                Log.e("AccountFragment", "Lỗi khi lấy dữ liệu người dùng", error.toException())
             }
-        }
-
-        userRef.addValueEventListener(userListener)
+        })
 
         binding.logOut.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
@@ -95,20 +85,22 @@ class AccountFragment : Fragment() {
             builder.setMessage("Bạn có chắc chắn muốn đăng xuất không?")
             builder.setPositiveButton("Có") { dialog, which ->
                 try {
-                    userRef.removeEventListener(userListener)
-                    FirebaseAuth.getInstance().signOut()
-                    val intent = Intent(requireContext(), LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    startActivity(intent)
-                    requireActivity().finish()
-                    Toast.makeText(requireContext(), "Đã đăng xuất", Toast.LENGTH_SHORT).show()
+                    val currentUserId = Firebase.auth.currentUser?.uid
+                    if (currentUserId != null) {
+                        val presenceRef = FirebaseDatabase.getInstance().reference.child("presence").child(currentUserId)
+
+                        presenceRef.setValue("offline").addOnSuccessListener {
+                            FirebaseAuth.getInstance().signOut()
+                            logoutListener?.onLogout()
+                        }
+                    }
                 } catch (e: Exception) {
                     Log.e("AccountFragment", "Lỗi khi đăng xuất", e)
                     Toast.makeText(requireContext(), "Lỗi khi đăng xuất", Toast.LENGTH_SHORT).show()
                 }
             }
             builder.setNegativeButton("Không") { dialog, which ->
-                // Không làm gì cả
+                // Không làm gì
             }
             builder.show()
         }
@@ -117,5 +109,10 @@ class AccountFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        logoutListener = null
     }
 }

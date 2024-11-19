@@ -11,16 +11,15 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
-import androidx.compose.ui.geometry.isEmpty
-import androidx.compose.ui.semantics.text
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.content.Intent
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import androidx.glance.visibility
 import androidx.recyclerview.widget.RecyclerView
+import com.example.h2h.Activity.ViewPostActivity
 import com.example.h2h.R
+import com.example.h2h.models.Comment
 import com.example.h2h.models.CreatePost
 import com.example.h2h.models.User
-import com.facebook.FacebookSdk.getApplicationContext
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -31,18 +30,33 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class PostAdapter(private val posts: List<CreatePost>) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
+class PostAdapter(private val posts: List<CreatePost>) : RecyclerView.Adapter<PostAdapter.PostViewHolder>(){
     private val postLikeHandler = PostLikeHandler()
     private val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.post_item, parent, false)
         return PostViewHolder(view)
     }
-
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = posts[position]
-        holder.likePostImageView.setOnClickListener {
-            postLikeHandler.handleLikeClick(post, holder.likePostImageView, holder.likesCountTextView)
+        val commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(post.postId!!)
+        commentsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val commentsCount = snapshot.childrenCount.toInt()
+                holder.commentsCountTextView.text = commentsCount.toString()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Xử lý lỗi
+            }
+        })
+        if (post.userId == currentUserUid) {
+            holder.editPostImageView.visibility = View.VISIBLE
+        } else {
+            holder.editPostImageView.visibility = View.GONE
+        }
+        holder.viewLike.setOnClickListener {
+            postLikeHandler.handleLikeClick(post, holder.likePostImageView, holder.likesCountTextView) // Truyền adapter và position
         }
         val isLiked = post.likes.containsKey(currentUserUid) // Kiểm tra xem người dùng hiện tại đã like bài viết chưa
         if (isLiked) {
@@ -88,6 +102,13 @@ class PostAdapter(private val posts: List<CreatePost>) : RecyclerView.Adapter<Po
                 // Handle error
             }
         })
+        /// cần sửa đổi
+        holder.showComment.setOnClickListener {
+            val intent = Intent(holder.itemView.context, ViewPostActivity::class.java)
+            intent.putExtra("postId", post.postId) // Truyền ID bài đăng
+            intent.putExtra("userId", post.userId) // Truyền ID người dùng
+            holder.itemView.context.startActivity(intent)
+        }
 
         // Display post content
         holder.contentTextView.text = post.content
@@ -131,6 +152,8 @@ class PostAdapter(private val posts: List<CreatePost>) : RecyclerView.Adapter<Po
         val sharesCountTextView: TextView = view.findViewById(R.id.textViewShareCountf)
         val editPostImageView: ImageView = view.findViewById(R.id.edit_post)
         val likePostImageView: ImageView = view.findViewById(R.id.imageViewLikef)
+        val showComment: LinearLayout = view.findViewById(R.id.comment_post)
+        val viewLike: LinearLayout = view.findViewById(R.id.view_like)
     }
 
     private fun formatTimeAgo(timestamp: Long): String {
@@ -205,6 +228,18 @@ class PostAdapter(private val posts: List<CreatePost>) : RecyclerView.Adapter<Po
         builder.show()
     }
 
-// ... (Các code khác)
+    fun addComment(comment: Comment) {
+        val post = posts.find { it.postId == comment.postId }
+        if (post != null && comment.id != null) {
+            // Sử dụng put() để thêm hoặc cập nhật phần tử trong Map
+            val mutableComments = post.comments.toMutableMap() // Tạo một bản sao có thể thay đổi
+            mutableComments[comment.id] = comment // Thêm hoặc cập nhật comment
+            post.comments = mutableComments.toMap() // Gán lại cho post.comments
+            notifyDataSetChanged()
+        } else {
+            // Xử lý trường hợp comment.id là null
+            Log.e("PostAdapter", "Comment ID is null")
+        }
+    }
 
 }

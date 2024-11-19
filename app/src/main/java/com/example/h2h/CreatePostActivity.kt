@@ -2,6 +2,7 @@ package com.example.h2h
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,6 +14,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.with
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.request.RequestOptions
 import com.example.h2h.models.CreatePost
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -23,6 +28,12 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import java.util.UUID
+import com.bumptech.glide.request.transition.Transition
+import android.graphics.drawable.Drawable
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.CustomTarget
+import com.google.firebase.crashlytics.buildtools.reloc.org.apache.commons.io.output.ByteArrayOutputStream
+import kotlin.text.toByteArray
 
 @Suppress("DEPRECATION")
 class CreatePostActivity : AppCompatActivity() {
@@ -117,15 +128,41 @@ class CreatePostActivity : AppCompatActivity() {
 
     private fun uploadMediaAndPost(content: String) {
         val storageRef = FirebaseStorage.getInstance().reference.child("posts/${UUID.randomUUID()}")
-        storageRef.putFile(mediaUri)
-            .addOnSuccessListener {
-                storageRef.downloadUrl.addOnSuccessListener { uri ->
-                    postToFirebaseDatabase(content, uri.toString())
+
+        // Nén ảnh bằng Glide
+        Glide.with(this)
+            .asBitmap()
+            .load(mediaUri)
+            .apply(
+                RequestOptions()
+                    .override(1024, 768) // Thay đổi kích thước ảnh nếu cần
+                    .format(DecodeFormat.PREFER_RGB_565) // Định dạng RGB_565
+                    .encodeQuality(80) // Chất lượng nén 80% (điều chỉnh theo nhu cầu)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE) // Tắt cache đĩa
+                    .skipMemoryCache(true) // Tắt cache bộ nhớ
+            )
+            .into(object : CustomTarget<Bitmap?>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap?>?) {
+                    val baos = ByteArrayOutputStream()
+                    resource.compress(Bitmap.CompressFormat.JPEG, 80, baos) // Nén ảnh
+                    val data = baos.toByteArray()
+
+                    // Tải ảnh đã nén lên Firebase Storage
+                    storageRef.putBytes(data)
+                        .addOnSuccessListener {
+                            storageRef.downloadUrl.addOnSuccessListener { uri ->
+                                postToFirebaseDatabase(content, uri.toString())
+                            }
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this@CreatePostActivity, "Failed to upload media", Toast.LENGTH_SHORT).show()
+                        }
                 }
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed to upload media", Toast.LENGTH_SHORT).show()
-            }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    // Xử lý khi tải ảnh bị hủy
+                }
+            })
     }
 
     private fun postToFirebaseDatabase(content: String, mediaUrl: String?) {

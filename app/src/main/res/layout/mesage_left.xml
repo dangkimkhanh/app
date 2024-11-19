@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:layout_marginTop="10dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -20,10 +21,34 @@
         android:id="@+id/message_text_recived"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/corner5dp"
+        android:maxWidth="300dp"
+        android:background="@drawable/layout_message_recived"
         android:padding="8dp"
-        android:layout_marginEnd="130dp"
         android:layout_marginStart="5dp"
-        android:text="Sample messageSample messageSample message"
-        android:textColor="@android:color/black" />
+        android:text="Sample   "
+        android:textColor="@color/white" />
+    <ImageView
+        android:id="@+id/message_image_recived"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:maxWidth="300dp"
+        android:adjustViewBounds="true"
+        android:visibility="gone" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ic_read"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_read"
+        app:civ_border_color="#fff"
+        android:layout_gravity="bottom"
+        android:clipToOutline="true"/>
+    <TextView
+        android:id="@+id/send_time"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="19:20"
+        android:layout_gravity="bottom"
+        android:clipToOutline="true"/>
 </LinearLayout>

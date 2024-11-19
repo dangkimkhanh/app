@@ -25,21 +25,16 @@ class PostLikeHandler {
 
             likesRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    // Cập nhật dữ liệu likes trong post
-                    post.likes = snapshot.value as? Map<String, Boolean> ?: emptyMap()
+                    val currentLikes = snapshot.value as? Map<String, Boolean> ?: emptyMap()
+                    val isLiked = currentLikes.containsKey(currentUserUid)
 
-                    // Kiểm tra trạng thái like
-                    val isLiked = post.likes.containsKey(currentUserUid)
-
-                    // Cập nhật giao diện
                     if (isLiked) {
-                        imageViewLikef.setColorFilter(ContextCompat.getColor(imageViewLikef.context, R.color.color_select_like)) // Đổi màu tim sang đỏ
+                        imageViewLikef.setColorFilter(ContextCompat.getColor(imageViewLikef.context, R.color.color_select_like))
+                        likesCountTextView.text = currentLikes.size.toString()
                     } else {
-                        imageViewLikef.setColorFilter(ContextCompat.getColor(imageViewLikef.context, R.color.color_unlike)) // Đổi màu tim sang xám
+                        imageViewLikef.setColorFilter(ContextCompat.getColor(imageViewLikef.context, R.color.color_unlike))
+                        likesCountTextView.text = currentLikes.size.toString()
                     }
-
-                    // Cập nhật số like
-                    likesCountTextView.text = post.likes.size.toString()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -49,10 +44,8 @@ class PostLikeHandler {
 
             // Thêm/bỏ like trong database
             if (!post.likes.containsKey(currentUserUid)) {
-                // Thêm like
                 likesRef.child(currentUserUid).setValue(true)
             } else {
-                // Bỏ like
                 likesRef.child(currentUserUid).removeValue()
             }
         }
