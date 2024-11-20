@@ -16,7 +16,6 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
         <!-- Thêm TextView để hiển thị tiêu đề -->
@@ -24,6 +23,8 @@
             android:id="@+id/avatar_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            app:civ_border_width="1dp"
+            app:civ_border_color="#FF007E"
             android:src="@drawable/default_avatar_male"
             android:layout_gravity="center_vertical"
             android:scaleType="centerCrop" />
@@ -84,6 +85,32 @@
         android:layout_width="match_parent"
         android:layout_height="3dp"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_chat"/>
+    <ImageView
+        android:id="@+id/pick_heart"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_heart"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.93"
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <TextView
+        android:id="@+id/time_countdown"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line1"
+        android:text="4:30"
+        android:textSize="20sp"
+        android:padding="4dp"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:textStyle="bold"
+        android:background="@drawable/bodercorner_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/message_recycler_view"
         android:layout_width="match_parent"
@@ -92,7 +119,6 @@
         app:layout_constraintTop_toBottomOf="@id/line1"
         android:padding="8dp"
         android:clipToPadding="false"
-        tools:listitem="@layout/item_chat"
         tools:ignore="MissingConstraints" />
 
     <!-- Layout nhập tin nhắn -->
@@ -102,7 +128,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="9dp"
+        android:padding="6dp"
         android:background="@color/material_dynamic_neutral99"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,9 +138,10 @@
             android:id="@+id/chose_send_image"
             android:layout_width="35dp"
             android:layout_height="35dp"
+            android:layout_marginStart="15dp"
             android:layout_gravity="center"
             android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_post"
+            android:src="@drawable/ic_image"
             app:tint="#797979"/>
         <EditText
             android:id="@+id/input_chat"

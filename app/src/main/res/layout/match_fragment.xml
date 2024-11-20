@@ -14,30 +14,30 @@
         <ImageView
             android:id="@+id/match_filter"
             android:foregroundGravity="center"
-            android:layout_width="35dp"
-            app:tint="#797979"
-            android:layout_marginStart="20dp"
+            android:layout_width="30dp"
+            app:tint="#DA31EB"
+            android:layout_marginStart="25dp"
             android:layout_gravity="center"
-            android:layout_height="35dp"
+            android:layout_height="30dp"
             android:layout_marginEnd="20dp"
             android:src="@drawable/ic_filter"/>
         <LinearLayout
             android:id="@+id/opent_mach"
             android:layout_width="wrap_content"
             android:gravity="center"
-            android:layout_marginStart="20dp"
             android:layout_height="match_parent">
             <ImageView
                 android:foregroundGravity="center"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_message"/>
             <TextView
+                android:textColor="#890B92"
                 android:gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
-                android:text="Ghép ngẫu nhiên"
+                android:text="Ghép ngẫu nhiên ?"
                 android:textSize="27dp"/>
         </LinearLayout>
     </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.h2h.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,11 @@ import android.widget.TextView
 import androidx.compose.ui.semantics.text
 import androidx.recyclerview.widget.RecyclerView
 import com.example.h2h.Activity.OnReplyClickListener
+import com.example.h2h.ProfileActivity
 import com.example.h2h.R
+import com.example.h2h.UserProfileActivity
 import com.example.h2h.models.Comment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -21,13 +25,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class CommentAdapter(private val context: Context, private val onReplyClickListener: OnReplyClickListener, private val postId: String) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
-
     private val comments: MutableList<Comment> = mutableListOf()
-
     init {
         loadComments(postId)
     }
-
     private fun loadComments(postId: String) {
         val commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(postId)
         commentsRef.addValueEventListener(object : ValueEventListener {
@@ -41,7 +42,6 @@ class CommentAdapter(private val context: Context, private val onReplyClickListe
                 }
                 notifyDataSetChanged()
             }
-
             override fun onCancelled(error: DatabaseError) {
                 // Xử lý lỗi khi lấy dữ liệu comment
             }
@@ -59,6 +59,28 @@ class CommentAdapter(private val context: Context, private val onReplyClickListe
             Log.d("CommentAdapter", "Reply button clicked")
             onReplyClickListener.showReplyInput(comment)
         }
+        val userId = comment.userId
+        val currentUser = FirebaseAuth.getInstance().currentUser?.uid
+        val intent = Intent(context, ProfileActivity::class.java)
+        val intentuser = Intent(context, UserProfileActivity::class.java)
+        if(userId == currentUser){
+            holder.usernameTextView.setOnClickListener {
+                context.startActivity(intent)
+            }
+            holder.avatarImageView.setOnClickListener {
+                context.startActivity(intent)
+            }
+        }else{
+            holder.usernameTextView.setOnClickListener {
+                intentuser.putExtra("OTHER_USER_ID", userId)
+                context.startActivity(intentuser)
+            }
+            holder.avatarImageView.setOnClickListener {
+                intentuser.putExtra("OTHER_USER_ID", userId)
+                context.startActivity(intentuser)
+            }
+        }
+
         // Lấy thông tin người dùng từ Firebase
         val userRef = FirebaseDatabase.getInstance().getReference("users").child(comment.userId!!)
         userRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -70,7 +92,6 @@ class CommentAdapter(private val context: Context, private val onReplyClickListe
                     Picasso.get().load(user.profileImageUrl).into(holder.avatarImageView)
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 // Xử lý lỗi khi lấy dữ liệu người dùng
             }

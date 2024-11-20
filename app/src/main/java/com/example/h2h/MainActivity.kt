@@ -10,17 +10,35 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.example.h2h.Fragment.*
 import com.example.h2h.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity(), AccountFragment.LogoutListener {
 
     private lateinit var binding: ActivityMainBinding
-    private val fragments: MutableList<Fragment> = mutableListOf()
     private lateinit var auth: FirebaseAuth
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
+    private lateinit var viewPager: ViewPager2
+
+    private inner class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
+        override fun getItemCount(): Int = 4
+
+        override fun createFragment(position: Int): Fragment {
+            return when (position) {
+                0 -> FeedFragment()
+                1 -> MachFragment()
+                2 -> ChatFragment()
+                3 -> AccountFragment()
+                else -> throw IllegalArgumentException("Invalid position")
+            }
+        }
+    }
 
     override fun onLogout() {
         startActivity(Intent(this, LoginActivity::class.java))
@@ -31,6 +49,10 @@ class MainActivity : AppCompatActivity(), AccountFragment.LogoutListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Tắt animation của BottomNavigationView
+        binding.bottomNavigation.labelVisibilityMode = BottomNavigationView.LABEL_VISIBILITY_UNLABELED
+
         auth = FirebaseAuth.getInstance()
         val currentUserId = auth.currentUser?.uid
         if (currentUserId != null) {
@@ -58,25 +80,39 @@ class MainActivity : AppCompatActivity(), AccountFragment.LogoutListener {
         }
         connectivityManager.registerDefaultNetworkCallback(networkCallback)
 
-        fragments.add(FeedFragment())
-        fragments.add(MapsFragment())
-        fragments.add(AccountFragment())
-        fragments.add(MachFragment())
-        fragments.add(ChatFragment())
+        // Khởi tạo ViewPager2 và ScreenSlidePagerAdapter
+        viewPager = findViewById(R.id.viewPager)
+        val pagerAdapter = ScreenSlidePagerAdapter(this)
+        viewPager.adapter = pagerAdapter
+        viewPager.offscreenPageLimit = 4 // Giữ 4 fragment trong bộ nhớ cache
 
-        replaceFragment(fragments[0], false)
 
+        // Lắng nghe sự thay đổi trang của ViewPager2 và cập nhật BottomNavigationView
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                when (position) {
+                    0 -> binding.bottomNavigation.selectedItemId = R.id.navigation_feed
+                    1 -> binding.bottomNavigation.selectedItemId = R.id.navigation_mach
+                    2 -> binding.bottomNavigation.selectedItemId = R.id.navigation_message
+                    3 -> binding.bottomNavigation.selectedItemId = R.id.navigation_profile
+                }
+            }
+        })
+
+        // Xử lý sự kiện click vào item trong BottomNavigationView
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.navigation_feed -> replaceFragment(fragments[0])
-                R.id.navigation_map -> replaceFragment(fragments[1])
-                R.id.navigation_profile -> replaceFragment(fragments[2])
-                R.id.navigation_mach -> replaceFragment(fragments[3])
-                R.id.navigation_message -> replaceFragment(fragments[4])
+                R.id.navigation_feed -> viewPager.setCurrentItem(0, false) // smoothScroll = false
+                R.id.navigation_mach -> viewPager.setCurrentItem(1, false) // smoothScroll = false
+                R.id.navigation_message -> viewPager.setCurrentItem(2, false) // smoothScroll = false
+                R.id.navigation_profile -> viewPager.setCurrentItem(3, false) // smoothScroll = false
                 else -> {}
             }
             true
         }
+
+        // Điều chỉnh padding cho BottomNavigationView
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.setPadding(insets.left, insets.top, insets.right, insets.bottom)
@@ -97,26 +133,7 @@ class MainActivity : AppCompatActivity(), AccountFragment.LogoutListener {
         }
     }
 
-    private fun replaceFragment(fragment: Fragment, addToBackStack: Boolean = true) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-
-        if (fragmentManager.findFragmentById(R.id.container) == fragment) {
-            if (fragment is Scrollable) {
-                fragment.scrollToTop()
-            }
-        } else {
-            fragmentTransaction.replace(R.id.container, fragment)
-            if (addToBackStack) {
-                fragmentTransaction.addToBackStack(null)
-            }
-        }
-
-        fragmentTransaction.commit()
+    interface Scrollable {
+        fun scrollToTop()
     }
-}
-
-
-interface Scrollable {
-    fun scrollToTop()
 }

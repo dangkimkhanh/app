@@ -5,10 +5,10 @@
         android:id="@+id/navigation_feed"
         android:icon="@drawable/ic_feed"
         android:title="" />
-    <item
+    <!--<item
         android:id="@+id/navigation_map"
         android:icon="@drawable/ic_map"
-        android:title="" />
+        android:title="" />-->
     <item
         android:id="@+id/navigation_mach"
         android:icon="@drawable/ic_post"

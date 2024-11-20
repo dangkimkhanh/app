@@ -1,6 +1,7 @@
 package com.example.h2h
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -40,6 +41,7 @@ class UserProfileActivity : AppCompatActivity() {
     private val postsList = mutableListOf<CreatePost>()
     private lateinit var toolbarTitle: TextView
     private lateinit var userNameTextView: TextView
+    private lateinit var startChatTextView: TextView
     private lateinit var userStatusTextView: TextView
     private lateinit var userCoverImageView: ImageView
     private lateinit var userAvatarImageView: ImageView
@@ -58,6 +60,7 @@ class UserProfileActivity : AppCompatActivity() {
         userNameTextView = findViewById(R.id.user_name_view)
         userStatusTextView = findViewById(R.id.text_status)
         userCoverImageView = findViewById(R.id.cover_image)
+        startChatTextView = findViewById(R.id.star_chat)
         userAvatarImageView = findViewById(R.id.user_avatar_image)
         setSupportActionBar(findViewById(R.id.toolbar_user_profile))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -65,6 +68,12 @@ class UserProfileActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         currentUserId = intent.getStringExtra("CURRENT_USER_ID") ?: ""
         otherUserId = intent.getStringExtra("OTHER_USER_ID") ?: ""
+        startChatTextView.setOnClickListener{
+             intent = Intent(this, ChatActivity::class.java)
+            intent.putExtra("OTHER_USER_ID", otherUserId)
+            startActivity(intent)
+
+        }
         val usersRef = FirebaseDatabase.getInstance().reference.child("users").child(otherUserId)
         usersRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

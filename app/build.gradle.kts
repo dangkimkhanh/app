@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.play.services.fido)
     implementation(libs.androidx.material3.android)
     implementation(libs.identity.jvm)
+    implementation(libs.firebase.messaging.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -105,6 +106,9 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
     implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.+")
     implementation("id.zelory:compressor:3.0.1")
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation ("com.google.firebase:firebase-messaging:24.4.0")
+
 
 
 

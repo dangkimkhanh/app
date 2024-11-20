@@ -9,7 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.compose.ui.semantics.text
+import com.example.h2h.ProfileActivity
+import com.example.h2h.UserProfileActivity
 import androidx.core.content.ContextCompat
 import androidx.glance.visibility
 import androidx.recyclerview.widget.RecyclerView
@@ -104,13 +105,24 @@ class FeedPostAdapter(private val context: Context) : RecyclerView.Adapter<FeedP
                     holder.userNameTextView.text = user.name
                     Picasso.get().load(user.profileImageUrl).into(holder.userAvatarImageView)
                 }
+
             }
 
             override fun onCancelled(error: DatabaseError) {
                 Log.e("FeedPostAdapter", "Error loading user info: ${error.message}")
             }
         })
-
+        holder.viewProfile.setOnClickListener {
+            val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
+            if (currentUserUid == post.userId) {
+                val intent = Intent(context, ProfileActivity::class.java)
+                context.startActivity(intent)
+            } else {
+                val intent = Intent(context, UserProfileActivity::class.java)
+                intent.putExtra("OTHER_USER_ID", post.userId)
+                context.startActivity(intent)
+            }
+        }
         // Display post content
         holder.contentTextView.text = post.content
         if (post.imageOrVideoUrl != null) {
@@ -181,6 +193,7 @@ class FeedPostAdapter(private val context: Context) : RecyclerView.Adapter<FeedP
     override fun getItemCount(): Int = posts.size
 
     inner class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val viewProfile: LinearLayout = view.findViewById(R.id.btn_view_profile)
         val userNameTextView: TextView = view.findViewById(R.id.nameView)
         val userAvatarImageView: ImageView = view.findViewById(R.id.avt_image)
         val contentTextView: TextView = view.findViewById(R.id.text_status)

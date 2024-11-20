@@ -6,17 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.ui.semantics.text
-import androidx.glance.visibility
 import java.util.Locale
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.h2h.R
 import com.example.h2h.models.Message
+import com.example.h2h.models.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.text.SimpleDateFormat
 import java.util.Date
-import kotlin.text.format
 
 class MessageAdapter(private val context: Context, private val messages: List<Message>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -79,7 +81,6 @@ class MessageAdapter(private val context: Context, private val messages: List<Me
                 messageImageView.visibility = View.VISIBLE
             }
 
-            // Format timestamp to HH:mm
             val timestamp = message.timestamp ?: 0
             val date = Date(timestamp)
             val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
@@ -88,14 +89,24 @@ class MessageAdapter(private val context: Context, private val messages: List<Me
     }
 
     inner class ReceivedMessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val avatarImageView: ImageView = itemView.findViewById(R.id.avatar_image)
+        private val avatarImageView: ImageView = itemView.findViewById(R.id.avatar_image_recived)
         private val messageTextView: TextView = itemView.findViewById(R.id.message_text_recived)
         private val timeTextView: TextView = itemView.findViewById(R.id.send_time)
         private val messageImageView: ImageView = itemView.findViewById(R.id.message_image_recived)
         fun bind(message: Message) {
-            // Load avatar image using Glide
-            Glide.with(context).load(message.senderId).into(avatarImageView)
+            var userRef = FirebaseDatabase.getInstance().reference.child("users").child(message.senderId ?: "")
+            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user = snapshot.getValue(User::class.java)
+                    if (user != null) {
+                        Glide.with(context).load(user.profileImageUrl).into(avatarImageView)
+                    }
+                }
 
+                override fun onCancelled(error: DatabaseError) {
+                    // Xử lý lỗi
+                }
+            })
             if (message.type == "text") {
                 messageTextView.text = message.content?.text
                 messageTextView.visibility = View.VISIBLE
